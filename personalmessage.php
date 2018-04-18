@@ -13,32 +13,37 @@
     <style>
 
 #main{
-    max-width:70%;
-    margin-left:25%;
+    width:70%;
     background-color:white;
     margin-left:15%;
     border: 2px solid #dedede;
     background-color: white;
     border-radius: 5px;
-    padding: 10px;
     border:0px;
+    overflow: scroll;
+    max-height:20%;
+    overflow-x:hidden;
 }
 #messagesto{
-    width:20%;
+    margin-left:60%;
+    max-width:20%;
+    height:20%;
     background-color:#3d6fc1;
     border-radius:12px;
     color:white;
     padding:2%;
+    text-align:right;
    
 }
 #messagesfrom{
-    width:30%;
+    max-width:30%;
     height:20%;
+    margin-left:20%;
     background-color:#5391f6;
     border-radius:12px;
     color:white;
     padding:2%;
-    align:right;
+    margin-right:2%;
 }
 #message{
   margin-left:15%;
@@ -134,9 +139,10 @@ $result = $pdo->query($query);
 echo "<div id='main'>";
 while ($row = $result->fetch()){
     if ($row["senderID"] == $convowith) {
-        echo '<p style="text-align: right">';
+        echo "<div id='right'>";
         echo "<div id='messagesto'>";
         echo $row["messagetext"]."<br>";
+        echo "</div>";
         echo "</div>";
         echo "</p>";
     }
@@ -164,7 +170,8 @@ echo "</div>";
 <script>
 //function to pass message to sendmessage.php which adds it to database.Then reset the page or do some ajax shit
 //to get newest messages.
-
+var elem = document.getElementById('main');
+  elem.scrollTop = elem.scrollHeight;
 
 window.setInterval(function(){
     $.ajax({
@@ -187,7 +194,6 @@ function myfunc(){
     url: 'sendmessage.php',
     data: { from: "<?php echo $trilado_username ?>", to: "<?php echo $convowith ?>",messagetext: document.getElementById("message").value},
     success: function(response) {
-        console.log('done');
 		document.getElementById("main").innerHTML += '<p align="left">';
         document.getElementById("main").innerHTML += "<div id='messagesfrom'>" + document.getElementById("message").value + "</div> </p>";
     }
